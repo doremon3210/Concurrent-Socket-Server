@@ -1,5 +1,6 @@
 import socket
 import time
+import threading
 # import sys
 
 
@@ -12,6 +13,7 @@ PORT = 1111
 
 s.connect((HOST, PORT))
 
+
 while (True):
     print("--------------------")
     print("1: Get the server's Date and Time")
@@ -22,33 +24,39 @@ while (True):
     print("6: Get the server's Running Processes")
     print("0: Exit")
 
-    command = input()
+    command = int(input())
 
     if (command == '0'):
+        print("Exiting the Program")
         break
 
     print("Enter number of client: ")
-    client_num = input()
+    client_num = int(input())
 
 
 
     startTimer = time.time()
 
+    for i in range(client_num):
+        t = threading.Thread(target = s.send(command.encode()))
+        #t = threading.Thread(target = s.send(), args = (command.encode(),))
+        t.start()
+        
+        #s.send(client_num.encode())
 
-    s.send(command.encode())
-    s.sned(client_num.encode())
+        print(s.recv(1024))
 
-    print(s.recv(1024))
+        t.join()
 
     print()
 
     stopTimer = time.time()
-    totalTime = round(stopTimer - startTimer, 2)
-    avgTime = round(totalTime / client_num, 2)
+    totalTime = stopTimer - startTimer
+    avgTime = totalTime / client_num
 
-    print("Total turn around time:", totalTime * 100, "ms")
+    print("Total turn around time:", round(totalTime * 100, 3), "ms")
     print()
-    print("Average time of response:", avgTime * 100, "ms")
+    print("Average time of response:", round(avgTime * 100, 3), "ms")
 
 
 
