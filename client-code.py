@@ -22,26 +22,26 @@ while (True):
     print("6: Get the server's Running Processes")
     print("0: Exit")
 
-    command = input()
-
-    if (command == '0'):
+    #Get command and client number
+    command = int(input())
+    if (command == 0):                  #I think this one is not needed
         break
-
     print("Enter number of client: ")
-    client_num = input()
-
+    client_num = int(input())
 
 
     startTimer = time.time()
 
 
+    # Send and receive from the server
     s.send(command.encode())
-    s.sned(client_num.encode())
-
+    #s.send(client_num.encode())              #I think this one is not needed
     print(s.recv(1024))
+
 
     print()
 
+    #Just print time
     stopTimer = time.time()
     totalTime = round(stopTimer - startTimer, 2)
     avgTime = round(totalTime / client_num, 2)
@@ -49,7 +49,6 @@ while (True):
     print("Total turn around time:", totalTime * 100, "ms")
     print()
     print("Average time of response:", avgTime * 100, "ms")
-
 
 
     print("--------------------")
