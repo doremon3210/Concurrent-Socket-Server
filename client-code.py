@@ -26,7 +26,7 @@ while (True):
 
     command = int(input())
 
-    if (command == '0'):
+    if (command == 0):
         print("Exiting the Program")
         break
 
@@ -37,15 +37,22 @@ while (True):
 
     startTimer = time.time()
 
+
+    threads = []
+
+
     for i in range(client_num):
         t = threading.Thread(target = s.send(command.encode()))
         #t = threading.Thread(target = s.send(), args = (command.encode(),))
+        threads.append(t)
+        t.setDaemon(True)
         t.start()
         
         #s.send(client_num.encode())
 
         print(s.recv(1024))
 
+    for t in threads:
         t.join()
 
     print()
